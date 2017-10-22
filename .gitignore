@@ -8,3 +8,4 @@
 /build/
 /.nuxt
 /package-lock.json
+/sessions

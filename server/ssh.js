@@ -2,11 +2,15 @@ import express from 'express'
 import pty from 'pty.js'
 import IO from 'socket.io'
 import path from 'path'
+import fs from 'fs'
 
 const router = express.Router()
 const ioPath = '/term/socket.io'
 
-var sshConfig = path.resolve(__dirname, '../sshConfig')
+var sshConfig = '/usr/share/ucloud-ssh/config'
+if (!fs.existsSync(sshConfig)) {
+    sshConfig = path.resolve(__dirname, '../ssh_config')
+}
 
 router.io = function(server, sessionStore) {
     var io = IO(server, { path: ioPath })
