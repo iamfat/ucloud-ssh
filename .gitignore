@@ -1,0 +1,10 @@
+._*
+.DS*
+.env
+/*.lock
+/*.log
+/node_modules/
+/dist/
+/build/
+/.nuxt
+/package-lock.json
