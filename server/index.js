@@ -18,12 +18,14 @@ var FileStore = require('session-file-store')(session)
 var sessionStore = new FileStore()
 
 // Add session middleware
-app.use(session({
-  store: sessionStore,
-  secret: process.env.SESSION_SECRET || '83719730',
-  resave: true,
-  saveUninitialized: false
-}))
+app.use(
+    session({
+        store: sessionStore,
+        secret: process.env.SESSION_SECRET || '83719730',
+        resave: true,
+        saveUninitialized: false
+    })
+)
 
 app.use('/api', bodyParser.json())
 
@@ -40,8 +42,8 @@ const nuxt = new Nuxt(config)
 
 // Build only in dev mode
 if (config.dev) {
-  const builder = new Builder(nuxt)
-  builder.build()
+    const builder = new Builder(nuxt)
+    builder.build()
 }
 
 // Give nuxt middleware to express

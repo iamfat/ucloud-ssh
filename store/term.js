@@ -1,15 +1,15 @@
 export const state = () => ({
-  host: null
+    host: null
 })
 
 export const mutations = {
-  connect (state, host) {
-    state.host = host
-  }
+    connect(state, host) {
+        state.host = host
+    }
 }
 
 export const actions = {
-  connect ({ commit, redirect }, host) {
-    commit('connect', host)
-  }
+    connect({ commit, redirect }, host) {
+        commit('connect', host)
+    }
 }

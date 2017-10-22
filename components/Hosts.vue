@@ -18,69 +18,75 @@
 import { mapState } from 'vuex'
 
 export default {
-  data () {
-    return {
-      keyword: null,
-      fetched: false
-    }
-  },
-  computed: mapState({
-    hosts (state) {
-      var hosts = state.ucloud.hosts
-      var projects = state.ucloud.projects
-      
-      hosts = Object.keys(hosts).map(key => {
-        var host = hosts[key]
-        var project = projects[host.project_id]
-        return Object.assign({ project: Object.assign({}, project)}, host)
-      })
-
-      var keyword = this.keyword
-      hosts = hosts.filter(host => {
-          if (keyword) {
-            return host.name.match(keyword) || host.ip.match(keyword)
-          } else {
-            return true
-          }
-        })
-
-      var keys = Object.keys(hosts);
-
-      keys.sort((ak,bk) => {
-        var a = hosts[ak], b = hosts[bk]
-        if (a.project_id != b.project_id) {
-          return a.project.name > b.project.name
+    data() {
+        return {
+            keyword: null,
+            fetched: false
         }
-        if (a.tag != b.tag) {
-          return a.tag > b.tag
+    },
+    computed: mapState({
+        hosts(state) {
+            var hosts = state.ucloud.hosts
+            var projects = state.ucloud.projects
+
+            hosts = Object.keys(hosts).map(key => {
+                var host = hosts[key]
+                var project = projects[host.project_id]
+                return Object.assign(
+                    { project: Object.assign({}, project) },
+                    host
+                )
+            })
+
+            var keyword = this.keyword
+            hosts = hosts.filter(host => {
+                if (keyword) {
+                    return host.name.match(keyword) || host.ip.match(keyword)
+                } else {
+                    return true
+                }
+            })
+
+            var keys = Object.keys(hosts)
+
+            keys.sort((ak, bk) => {
+                var a = hosts[ak]
+                var b = hosts[bk]
+                if (a.project_id !== b.project_id) {
+                    return a.project.name > b.project.name
+                }
+                if (a.tag !== b.tag) {
+                    return a.tag > b.tag
+                }
+                return a.name > b.name
+            })
+            return keys.map(key => hosts[key])
         }
-        return a.name > b.name
-      })
-      return keys.map(key => hosts[key])
-    }
-  }),
-  methods: {
-    connectTo (host) {
-      this.$store.dispatch('term/connect', host)
-    }
-  },
-  mounted () {
-    this.$store.dispatch('ucloud/fetchProjects').then(projects => {
-      var r = Promise.resolve()
-      Object.keys(projects).forEach(project_id => {
-        r = r.then(()=>{
-          return this.$store.dispatch('ucloud/fetchHosts', { project_id }).then(hosts => {
-            console.log(hosts)
-          })
+    }),
+    methods: {
+        connectTo(host) {
+            this.$store.dispatch('term/connect', host)
+        }
+    },
+    mounted() {
+        this.$store.dispatch('ucloud/fetchProjects').then(projects => {
+            var sequential = Promise.resolve()
+            Object.keys(projects).forEach(projectId => {
+                sequential = sequential.then(() => {
+                    return this.$store.dispatch('ucloud/fetchHosts', {
+                        project_id: projectId
+                    })
+                })
+            })
+            sequential
+                .then(() => {
+                    this.fetched = true
+                })
+                .catch(e => {
+                    console.log(e)
+                })
         })
-      })
-      r.then(() => {
-        this.fetched = true
-      }).catch(e => {
-        console.log(e)
-      })
-    })
-  }
+    }
 }
 </script>
 
