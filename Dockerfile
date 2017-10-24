@@ -9,4 +9,4 @@ RUN apk add --no-cache ncurses python make g++ openssh-client bash \
 
 WORKDIR /usr/src/app
 
-ENTRYPOINT ['npm', 'run', 'start']
+ENTRYPOINT ['/usr/local/bin/npm', 'run', 'start']
