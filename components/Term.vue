@@ -18,15 +18,20 @@ export default {
     }),
     watch: {
         host(host) {
-            var $term = document.getElementById('term')
-            var token = this.token
+            let $term = document.getElementById('term')
             $term.focus()
             this.term.clearHome()
-            this.socket.emit(
-                'term connect',
-                host === 'console' ? host : host.ip,
-                token
-            )
+            var message
+            if (host === 'console') {
+                message = { host: 'console', token: this.token }
+            } else {
+                message = {
+                    host: host.ip,
+                    token: this.token,
+                    project: host.project
+                }
+            }
+            this.socket.emit('term connect', message)
         }
     },
     mounted() {
@@ -71,6 +76,7 @@ export default {
                     '//cdn.jsdelivr.net/font-hack/2.019/css/hack-extended.min.css'
                 )
                 term.prefs_.set('font-family', '"Hack",monospace')
+                term.prefs_.set('enable-bold', false)
                 term.prefs_.set('background-color', '#1e1e1e')
                 term.prefs_.set('ctrl-c-copy', true)
                 term.prefs_.set('ctrl-v-paste', true)
@@ -109,6 +115,6 @@ export default {
 
 <style scoped lang="stylus">
 #term
-  width 100%
-  height 100%
+    width 100%
+    height 100%
 </style>

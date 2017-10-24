@@ -3,6 +3,7 @@ import pty from 'pty.js'
 import IO from 'socket.io'
 import path from 'path'
 import fs from 'fs'
+import config from '../ucloud.config'
 
 const router = express.Router()
 const ioPath = '/term/socket.io'
@@ -46,7 +47,7 @@ router.io = function(server, sessionStore) {
             })
         }
 
-        socket.on('term connect', (host, token) => {
+        socket.on('term connect', ({ host, token, project }) => {
             console.log('try to connect with token=' + token)
             sessionStore.get(token, (err, session) => {
                 if (err) {
@@ -54,9 +55,22 @@ router.io = function(server, sessionStore) {
                     console.log('sessionStore get error with token=' + token)
                     return
                 }
-                if (session.user.token === token) {
-                    createTerm(host)
+                if (!session.user.username) {
+                    console.log('failed to fetch username')
+                    return
                 }
+                var allowedUsers = (config.allowedUsers['*'] || []).concat(
+                    config.allowedUsers['@' + project.name] || []
+                )
+                if (allowedUsers.indexOf(session.user.username) >= 0) {
+                    createTerm(host)
+                } else {
+                    socket.emit(
+                        'output',
+                        'You are not allowed to log in this host!\r'
+                    )
+                }
+                // session.user.username
             })
         })
 

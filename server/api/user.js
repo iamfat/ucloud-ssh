@@ -1,14 +1,32 @@
 import { Router } from 'express'
+import crypto from 'crypto'
+import config from '../../ucloud.config'
+import axios from '../../plugins/axios'
 
 const router = Router()
 
+async function auth(username, password) {
+    let url = config.gapperBase + '/api/v1/auth/verify'
+    const e = encodeURIComponent
+    let { data } = await axios.get(
+        url + '?username=' + e(username) + '&password=' + e(password)
+    )
+    return data
+}
+
 router.post('/login', function(req, res, next) {
-    var data = {
-        username: req.body.username,
-        token: req.session.id
-    }
-    req.session.user = data
-    res.json(data)
+    auth(req.body.username, req.body.password)
+        .then(data => {
+            req.session.user = data
+            res.json({
+                username: data.username,
+                token: req.session.id
+            })
+        })
+        .catch(e => {
+            console.log(e)
+            res.sendStatus(401)
+        })
     // res.sendStatus(error.response.status)
 })
 

@@ -27,15 +27,15 @@ export const mutations = {
 
 export const actions = {
     async fetchProjects({ commit, redirect, state }) {
-        let res = await axios.get('/api/ucloud/projects')
-        commit('setProjects', { projects: res.data })
+        let { data } = await axios.get('/api/ucloud/projects')
+        commit('setProjects', { projects: data })
         return state.projects
     },
     async fetchHosts({ commit, redirect, state }, { project_id }) {
-        let res = await axios.get(
+        let { data } = await axios.get(
             '/api/ucloud/hosts?project_id=' + encodeURIComponent(project_id)
         )
-        commit('addProjectHosts', { project_id: project_id, hosts: res.data })
+        commit('addProjectHosts', { project_id: project_id, hosts: data })
         return state.hosts
     }
 }

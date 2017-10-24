@@ -1,17 +1,20 @@
 <template lang="pug">
 #hosts
-  div(style='padding:1em 1em 0 0')
-    mu-text-field(hintText='快速定位', v-model='keyword', icon='search',fullWidth=true)
-  mu-list
-    template(v-if='fetched')
-      mu-list-item(v-for='(host,index) in hosts', :key='index', :value='host.id', @click='connectTo(host)',:title='host.name', :describeText='host.ip')
-        mu-avatar(slot='leftAvatar',icon='dns')
-        mu-badge(:content='host.project.name',color="#36c")
-        | &nbsp;
-        mu-badge(:content='host.tag',color="#36c")
+  template(v-if='fetching')
+    div(style='text-align:center;padding:40px auto')
+      mu-circular-progress
+  template(v-else)
+    div(style='padding:1em 1em 0 0')
+      mu-text-field(hintText='快速定位', v-model='keyword', icon='search',fullWidth=true)
+    template(v-if='hosts.length==0')
+      p(style='text-align:center;color:#999') 没有候选结果
     template(v-else)
-      div(style='text-align:center')
-        mu-circular-progress
+      mu-list(:value='currentHost')
+        mu-list-item(v-for='(host,index) in hosts', :key='index', :value='host.id', @click='connectTo(host)',:title='host.name', :describeText='host.ip')
+          mu-avatar(slot='leftAvatar',icon='dns')
+          mu-badge(:content='host.project.name',color="#36c")
+          | &nbsp;
+          mu-badge(:content='host.tag',color="#36c")
 </template>
 
 <script>
@@ -21,10 +24,12 @@ export default {
     data() {
         return {
             keyword: null,
-            fetched: false
+            fetching: false,
+            currentHost: null
         }
     },
     computed: mapState({
+        isLoggedIn: state => !!state.user.me,
         hosts(state) {
             var hosts = state.ucloud.hosts
             var projects = state.ucloud.projects
@@ -38,17 +43,18 @@ export default {
                 )
             })
 
-            var keyword = this.keyword
             hosts = hosts.filter(host => {
-                if (keyword) {
-                    return host.name.match(keyword) || host.ip.match(keyword)
+                if (this.keyword) {
+                    return (
+                        host.name.match(this.keyword) ||
+                        host.ip.match(this.keyword)
+                    )
                 } else {
                     return true
                 }
             })
 
             var keys = Object.keys(hosts)
-
             keys.sort((ak, bk) => {
                 var a = hosts[ak]
                 var b = hosts[bk]
@@ -63,34 +69,44 @@ export default {
             return keys.map(key => hosts[key])
         }
     }),
+    watch: {
+        isLoggedIn(isLoggedIn) {
+            isLoggedIn && this.fetchProjects()
+        }
+    },
     methods: {
         connectTo(host) {
             this.$store.dispatch('term/connect', host)
+            this.currentHost = host.id
+        },
+        async fetchProjects() {
+            this.fetching = true
+            let projects = await this.$store.dispatch('ucloud/fetchProjects')
+            for (var id in projects) {
+                await this.$store.dispatch('ucloud/fetchHosts', {
+                    project_id: id
+                })
+            }
+            this.fetching = false
         }
     },
-    mounted() {
-        this.$store.dispatch('ucloud/fetchProjects').then(projects => {
-            var sequential = Promise.resolve()
-            Object.keys(projects).forEach(projectId => {
-                sequential = sequential.then(() => {
-                    return this.$store.dispatch('ucloud/fetchHosts', {
-                        project_id: projectId
-                    })
-                })
-            })
-            sequential
-                .then(() => {
-                    this.fetched = true
-                })
-                .catch(e => {
-                    console.log(e)
-                })
-        })
+    created() {
+        if (this.$store.state.user.me) this.fetchProjects()
     }
 }
 </script>
 
 <style lang="stylus">
 #hosts
-  background-color white
+    background-color white
+
+    .mu-item.selected
+        background-color #3a9
+
+        .mu-item-title
+            color #fff
+            font-weight bold
+
+        .mu-item-text
+            color #f1f1f1
 </style>
