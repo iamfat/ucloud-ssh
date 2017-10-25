@@ -23,7 +23,7 @@ module.exports = {
     /*
     ** Global CSS
     */
-    css: ['font-awesome/css/font-awesome.css'],
+    css: [],
     /*
     ** Add axios globally
     */

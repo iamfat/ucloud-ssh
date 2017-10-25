@@ -9,7 +9,7 @@ const ioPath = '/term/socket.io'
 
 var sshConfig = '/usr/share/ucloud-ssh/config'
 if (!fs.existsSync(sshConfig)) {
-    sshConfig = path.resolve(__dirname, '../ssh_config')
+    sshConfig = path.resolve(__dirname, '../ssh/config')
 }
 
 router.io = function(server, sessionStore) {
