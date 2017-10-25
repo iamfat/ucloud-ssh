@@ -2,8 +2,9 @@
 import sha1 from 'sha1'
 import axios from './axios'
 
+const config = require('../ucloud.config')
+
 function getSignature(params) {
-    const config = require('../ucloud.config')
     params.PublicKey = config.publicKey
 
     var str = ''
