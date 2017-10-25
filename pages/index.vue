@@ -9,14 +9,12 @@
 </template>
 
 <script>
-import Term from '~/components/Term.vue'
-import Hosts from '~/components/Hosts.vue'
 import axios from '~/plugins/axios'
 
 export default {
     components: {
-        Term,
-        Hosts
+        Term: () => import('~/components/Term.vue'),
+        Hosts: () => import('~/components/Hosts.vue')
     },
     head() {
         return {

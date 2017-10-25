@@ -21,13 +21,13 @@ router.get('/projects', function(req, res, next) {
     }
 
     UCloud.GetProjectList({ ResourceCount: true, MemberCount: true })
-        .then(response => {
-            if (response.RetCode !== 0) {
-                res.status(response.RetCode).send(response.Message)
+        .then(({ data }) => {
+            if (data.RetCode !== 0) {
+                res.status(data.RetCode).send(data.Message)
                 return
             }
             projects = {}
-            response.ProjectSet.forEach(rp => {
+            data.ProjectSet.forEach(rp => {
                 projects[rp.ProjectId] = {
                     id: rp.ProjectId,
                     name: rp.ProjectName,
@@ -55,13 +55,13 @@ router.get('/hosts', function(req, res, next) {
             Offset: 0,
             Limit: 100
         })
-        .then(response => {
-            if (response.RetCode !== 0) {
-                res.status(response.RetCode).send(response.Message)
+        .then(({ data }) => {
+            if (data.RetCode !== 0) {
+                res.status(data.RetCode).send(data.Message)
                 return
             }
             var hosts = {}
-            response.UHostSet.map(host => {
+            data.UHostSet.map(host => {
                 hosts[host.UHostId] = {
                     id: host.UHostId,
                     name: host.Name,

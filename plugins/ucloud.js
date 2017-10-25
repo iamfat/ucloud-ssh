@@ -31,16 +31,7 @@ var UCloud = new Proxy(
                     Object.keys(params)
                         .map(k => e(k) + '=' + e(params[k]))
                         .join('&')
-                return new Promise((resolve, reject) => {
-                    axios
-                        .get(url)
-                        .then(({ data }) => {
-                            resolve(data)
-                        })
-                        .catch(err => {
-                            reject(err)
-                        })
-                })
+                return axios.get(url)
             }
         }
     }
