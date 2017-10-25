@@ -5,7 +5,7 @@ import axios from '../../plugins/axios'
 const router = Router()
 
 async function auth(username, password) {
-    const config = require('../ucloud.config')
+    const config = require('../../ucloud.config')
     let url = config.gapperBase + '/api/v1/auth/verify'
     const e = encodeURIComponent
     let { data } = await axios.get(
