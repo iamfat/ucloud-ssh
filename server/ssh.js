@@ -3,7 +3,6 @@ import pty from 'pty.js'
 import IO from 'socket.io'
 import path from 'path'
 import fs from 'fs'
-import config from '../ucloud.config'
 
 const router = express.Router()
 const ioPath = '/term/socket.io'
@@ -59,6 +58,8 @@ router.io = function(server, sessionStore) {
                     console.log('failed to fetch username')
                     return
                 }
+
+                const config = require('../ucloud.config')
                 var allowedUsers = (config.allowedUsers['*'] || []).concat(
                     config.allowedUsers['@' + project.name] || []
                 )
