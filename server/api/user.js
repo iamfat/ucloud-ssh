@@ -31,14 +31,17 @@ router.post('/login', function(req, res, next) {
 })
 
 router.post('/logout', function(req, res, next) {
-    delete req.session.user
+    req.session.destroy()
     res.json(true)
 })
 
 router.get('/status', function(req, res, next) {
     var user = req.session.user
     if (user) {
-        res.json(user)
+        res.json({
+            username: user.username,
+            token: req.session.id
+        })
     } else {
         res.sendStatus(401)
     }

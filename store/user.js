@@ -12,6 +12,7 @@ export const mutations = {
     },
     logout(state) {
         state.me = null
+        state.doLogin = true
     },
     doLogin(state) {
         state.doLogin = true

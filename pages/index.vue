@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import axios from '~/plugins/axios'
-
 export default {
     components: {
         Term: () => import('~/components/Term.vue'),
@@ -19,14 +17,6 @@ export default {
     head() {
         return {
             title: 'UCloud SSH'
-        }
-    },
-    async fetch({ store, params, redirect }) {
-        try {
-            let { data } = await axios.get('/api/user/status')
-            store.commit('user/login', data)
-        } catch (e) {
-            store.commit('user/doLogin')
         }
     }
 }
