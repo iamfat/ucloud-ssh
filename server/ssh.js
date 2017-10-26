@@ -3,6 +3,7 @@ import pty from 'pty.js'
 import IO from 'socket.io'
 import path from 'path'
 import fs from 'fs'
+import config from '../plugins/config'
 
 const router = express.Router()
 const ioPath = '/term/socket.io'
@@ -59,7 +60,6 @@ router.io = function(server, sessionStore) {
                     return
                 }
 
-                const config = require('../ucloud.config')
                 var allowedUsers = (config.allowedUsers['*'] || []).concat(
                     config.allowedUsers['@' + project.name] || []
                 )

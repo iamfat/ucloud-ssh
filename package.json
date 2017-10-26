@@ -19,6 +19,7 @@
     "express": "^4.15.3",
     "express-session": "^1.15.6",
     "hterm-umdjs": "^1.2.0",
+    "js-yaml": "^3.10.0",
     "material-design-icons": "^3.0.1",
     "muse-ui": "^2.1.0",
     "nuxt": "^1.0.0-rc11",

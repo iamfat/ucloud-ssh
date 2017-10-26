@@ -1,11 +1,11 @@
 import { Router } from 'express'
 import crypto from 'crypto'
 import axios from '../../plugins/axios'
+import config from '../../plugins/config'
 
 const router = Router()
 
 async function auth(username, password) {
-    const config = require('../../ucloud.config')
     let url = config.gapperBase + '/api/v1/auth/verify'
     const e = encodeURIComponent
     let { data } = await axios.get(

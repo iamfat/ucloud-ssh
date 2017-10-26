@@ -1,8 +1,7 @@
 // run only on server-side
 import sha1 from 'sha1'
 import axios from './axios'
-
-const config = require('../ucloud.config')
+import config from './config'
 
 function getSignature(params) {
     params.PublicKey = config.publicKey
