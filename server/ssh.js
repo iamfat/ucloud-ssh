@@ -8,11 +8,6 @@ import config from '../plugins/config'
 const router = express.Router()
 const ioPath = '/term/socket.io'
 
-var sshConfig = '/usr/share/ucloud-ssh/config'
-if (!fs.existsSync(sshConfig)) {
-    sshConfig = path.resolve(__dirname, '../ssh/config')
-}
-
 router.io = function(server, sessionStore) {
     var io = IO(server, { path: ioPath })
 
@@ -29,7 +24,7 @@ router.io = function(server, sessionStore) {
                     rows: 25
                 })
             } else {
-                term = pty.spawn('/usr/bin/ssh', [host, '-F', sshConfig], {
+                term = pty.spawn('/usr/bin/ssh', [host, '-F', config.sshConfig || '/usr/local/share/ucloud-ssh/config'], {
                     name: 'xterm-color',
                     cols: 80,
                     rows: 25

@@ -21,19 +21,19 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /tmp:/tmp
-      - ./ssh_config:/usr/share/ucloud-ssh/config
-      - ./ssh_identity:/usr/share/ucloud-ssh/identity
+      - ./ssh/config:/usr/local/share/ucloud-ssh/config
+      - ./ssh/id_rsa:/usr/local/share/ucloud-ssh/id_rsa
       - ../../dev/log:/dev/log
 ```
 ### 3. 准备 `ssh_config` 和 `ssh_identity`
 ```bash
 # sample of ssh_config
 Host 10.10.*
-  ProxyCommand /usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ./identity -W %h:%p genee@vpn.genee.cn
+  ProxyCommand /usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /usr/local/share/ucloud-ssh/id_rsa -W %h:%p genee@vpn.genee.cn
   User genee
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
-  IdentityFile ./identity
+  IdentityFile /usr/local/share/ucloud-ssh/id_rsa
   IdentitiesOnly yes
 ```
 
