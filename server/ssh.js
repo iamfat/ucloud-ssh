@@ -42,7 +42,7 @@ router.io = function(server, sessionStore) {
             })
         }
 
-        socket.on('term connect', ({ host, token, project }) => {
+        socket.on('term connect', ({ host, token }) => {
             console.log('try to connect with token=' + token)
             sessionStore.get(token, (err, session) => {
                 if (err) {
@@ -56,10 +56,12 @@ router.io = function(server, sessionStore) {
                 }
 
                 var allowedUsers = (config.allowedUsers['*'] || []).concat(
-                    config.allowedUsers['@' + project.name] || []
+                    config.allowedUsers['@' + host.project.name] || [],
+                    config.allowedUsers[host.name] || [],
+                    config.allowedUsers[host.ip] || []
                 )
                 if (allowedUsers.indexOf(session.user.username) >= 0) {
-                    createTerm(host)
+                    createTerm(host.ip)
                 } else {
                     socket.emit(
                         'output',

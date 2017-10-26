@@ -26,9 +26,8 @@ export default {
                 message = { host: 'console', token: this.token }
             } else {
                 message = {
-                    host: host.ip,
-                    token: this.token,
-                    project: host.project
+                    host: host,
+                    token: this.token
                 }
             }
             this.socket.emit('term connect', message)
