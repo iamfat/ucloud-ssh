@@ -24,7 +24,7 @@ router.post('/login', function(req, res, next) {
             })
         })
         .catch(e => {
-            console.log(e)
+            console.log(e.response.status + ': ' + e.response.statusText)
             res.sendStatus(401)
         })
     // res.sendStatus(error.response.status)
