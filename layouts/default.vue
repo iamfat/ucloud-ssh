@@ -5,50 +5,24 @@
       mu-flat-button(v-if='userName',:label='userName',slot='right')
       mu-icon-button(v-if='isLoggedIn',icon='exit_to_app',slot='right',@click='doLogout')
   nuxt
-  mu-dialog(:open='doLogin',title='请先登录')
-    div(v-if='loading', style='text-align:center')
-      mu-circular-progress(:size="40")
-    div(v-else)
-      mu-text-field(label='用户名',labelFloat,v-model='loginForm.username',fullWidth,@keyup.enter.native='submitLogin')
-      br
-      mu-text-field(label='密码',labelFloat,type='password',v-model='loginForm.password',fullWidth,@keyup.enter.native='submitLogin')
-      br
-    mu-raised-button(label='登录', slot='actions', primary, @click='submitLogin')
+  login-form
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import axios from '@/plugins/axios'
+import axios from '~/plugins/axios'
 
 export default {
-    data() {
-        return {
-            loginForm: {
-                username: null,
-                password: null
-            },
-            loading: false
-        }
+    components: {
+        'login-form': () => import('~/components/LoginForm.vue')
     },
     computed: mapState({
-        doLogin: state => state.user.doLogin,
         isLoggedIn: state => !!state.user.me,
-        userName: state => state.user.me ? state.user.me.username : null
+        userName: state => (state.user.me ? state.user.me.username : null)
     }),
     methods: {
         doneLogin() {
             this.$store.commit('user/doneLogin')
-        },
-        submitLogin() {
-            this.loading = true
-            this.$store.dispatch('user/login', {
-                username: this.loginForm.username,
-                password: this.loginForm.password
-            }).then(() => {
-                this.loading = false
-            })
-            this.loginForm.username = null
-            this.loginForm.password = null
         },
         doLogout() {
             this.$store.dispatch('user/logout')
@@ -71,26 +45,26 @@ export default {
 
 <style lang="stylus">
 html
-    height 100%
+  height 100%
 
 body
-    min-height 100%
-    padding 0
-    margin 0
-    display flex
+  min-height 100%
+  padding 0
+  margin 0
+  display flex
 
 #__nuxt
-    width 100%
-    display flex
-    flex-grow 1
+  width 100%
+  display flex
+  flex-grow 1
 
 #body
-    width 100%
-    display flex
-    flex-direction column
+  width 100%
+  display flex
+  flex-direction column
 
-    .content
-        flex-grow 1
+  .content
+    flex-grow 1
 </style>
 
 
