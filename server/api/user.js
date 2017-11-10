@@ -27,7 +27,6 @@ router.post('/login', function(req, res, next) {
             console.log(e.response.status + ': ' + e.response.statusText)
             res.sendStatus(401)
         })
-    // res.sendStatus(error.response.status)
 })
 
 router.post('/logout', function(req, res, next) {

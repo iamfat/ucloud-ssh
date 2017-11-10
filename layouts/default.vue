@@ -14,7 +14,6 @@
       mu-text-field(label='密码',labelFloat,type='password',v-model='loginForm.password',fullWidth,@keyup.enter.native='submitLogin')
       br
     mu-raised-button(label='登录', slot='actions', primary, @click='submitLogin')
-</div>  
 </template>
 
 <script>
