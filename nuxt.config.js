@@ -3,7 +3,7 @@ module.exports = {
     ** Headers of the page
     */
     head: {
-        title: 'starter',
+        title: 'UCloud SSH',
         meta: [
             { charset: 'utf-8' },
             {
@@ -13,7 +13,7 @@ module.exports = {
             {
                 hid: 'description',
                 name: 'description',
-                content: 'Nuxt.js project'
+                content: 'UCloud SSH'
             }
         ]
         // link: [
@@ -29,6 +29,10 @@ module.exports = {
     */
     build: {
         vendor: ['axios'],
+        babel: {
+            presets: ['es2015', 'stage-0'],
+            plugins: ['transform-runtime']
+        },
         /*
         ** Run ESLINT on save
         */
