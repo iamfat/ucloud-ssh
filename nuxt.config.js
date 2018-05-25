@@ -30,7 +30,7 @@ module.exports = {
     build: {
         vendor: ['axios'],
         babel: {
-            presets: ['es2015', 'stage-0'],
+            presets: ['env'],
             plugins: ['transform-runtime']
         },
         /*
