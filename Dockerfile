@@ -6,7 +6,7 @@ ADD . /usr/src/app
 RUN apk add --no-cache ncurses openssh-client bash
 RUN apk add --no-cache --virtual .build-deps python make g++ \
     && cd /usr/src/app && rm -rf node_modules && npm i \
-    && npm run build && npm prune \
+    && npm run build && npm prune --production \
     && apk del .build-deps
 
 WORKDIR /usr/src/app
