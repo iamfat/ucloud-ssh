@@ -1,7 +1,9 @@
-/.git*
-/node_modules
-/yarn*
-/.vscode
-/.nuxt
-/build
+.git*
+.vscode
+.nuxt
+node_modules
+yarn*
+build
 README.md
+Dockerfile
+.dockerignore
