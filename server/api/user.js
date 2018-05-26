@@ -20,6 +20,10 @@ router.post('/login', function(req, res, next) {
             req.session.user = data
             res.json({
                 username: data.username,
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                icon: data.icon,
                 token: req.session.id
             })
         })
