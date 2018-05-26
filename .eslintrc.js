@@ -11,7 +11,8 @@ module.exports = {
     // add your custom rules here
     rules: {
         'indent': ['error', 4],
-        'space-before-function-paren': ['warn', {"anonymous": "never", "named": "never"}]
+        'space-before-function-paren': ['warn', {"anonymous": "never", "named": "never"}],
+        'camelcase': 'off'
     },
     globals: {}
 }

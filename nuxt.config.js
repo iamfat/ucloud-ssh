@@ -29,10 +29,6 @@ module.exports = {
     */
     build: {
         vendor: ['axios'],
-        babel: {
-            presets: ['env'],
-            plugins: ['transform-runtime']
-        },
         /*
         ** Run ESLINT on save
         */

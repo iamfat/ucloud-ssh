@@ -54,6 +54,7 @@ body
   display flex
 
 #__nuxt
+#__layout
   width 100%
   display flex
   flex-grow 1
