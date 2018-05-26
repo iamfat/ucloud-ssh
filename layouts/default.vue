@@ -18,7 +18,7 @@ export default {
     },
     computed: mapState({
         isLoggedIn: state => !!state.user.me,
-        userName: state => (state.user.me ? state.user.me.username : null)
+        userName: state => (state.user.me ? state.user.me.name : null)
     }),
     methods: {
         doneLogin() {
