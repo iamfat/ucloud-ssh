@@ -1,20 +1,20 @@
 <template lang="pug">
 #body
+  login-form
   .header
     mu-appbar(title='UCloud SSH')
       mu-flat-button(v-if='userName',:label='userName',slot='right')
       mu-icon-button(v-if='isLoggedIn',icon='exit_to_app',slot='right',@click='doLogout')
   nuxt
-  login-form
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import axios from '~/plugins/axios'
+import LoginForm from '~/components/LoginForm.vue'
 
 export default {
     components: {
-        'login-form': () => import('~/components/LoginForm.vue')
+        LoginForm
     },
     computed: mapState({
         isLoggedIn: state => !!state.user.me,
@@ -26,19 +26,10 @@ export default {
         },
         doLogout() {
             this.$store.dispatch('user/logout')
-        },
-        async checkAuth() {
-            let commit = this.$store.commit
-            try {
-                let { data } = await axios.get('/api/user/status')
-                commit('user/login', data)
-            } catch (e) {
-                commit('user/doLogin')
-            }
         }
     },
     mounted() {
-        this.checkAuth()
+        this.$store.dispatch('user/status')
     }
 }
 </script>

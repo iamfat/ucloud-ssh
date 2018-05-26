@@ -38,5 +38,13 @@ export const actions = {
     async logout({ commit }) {
         await axios.post('/api/user/logout')
         commit('logout')
+    },
+    async status({ commit }) {
+        try {
+            let { data } = await axios.get('/api/user/status')
+            commit('login', data)
+        } catch (e) {
+            commit('doLogin')
+        }
     }
 }
