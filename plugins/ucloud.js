@@ -16,11 +16,11 @@ function getSignature(params) {
     return sha1(str)
 }
 
-var UCloud = new Proxy(
+export default new Proxy(
     {},
     {
         get(target, action) {
-            return function(params) {
+            return async params => {
                 params.Action = action
                 params.Signature = getSignature(params)
                 const e = encodeURIComponent
@@ -30,10 +30,9 @@ var UCloud = new Proxy(
                     Object.keys(params)
                         .map(k => e(k) + '=' + e(params[k]))
                         .join('&')
-                return axios.get(url)
+                let { data } = await axios.get(url)
+                return data
             }
         }
     }
 )
-
-export default UCloud
